@@ -1,6 +1,7 @@
-package com.ps.backend.merchent.entity;
+package com.ps.backend.merchant.entity;
 
 import com.ps.backend.common.enums.BusinessType;
+import com.ps.backend.common.enums.MerchantStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -58,7 +59,7 @@ public class Merchant {
     @NotNull(message = "Account status is required")
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 30)
-    private Status status = Status.PENDING_KYC;
+    private MerchantStatus status = MerchantStatus.PENDING_KYC;
 
     @Pattern(
             regexp = "^$|^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$",
@@ -67,7 +68,7 @@ public class Merchant {
     @Column(name = "gst_id", length = 15)
     private String gstId;
 
-   @NotBlank(message = "PAN is mandatory for merchant onboarding")
+    @NotBlank(message = "PAN is mandatory for merchant onboarding")
     @Pattern(regexp = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$", message = "Invalid Indian PAN format")
     @Column(name = "pan_id", nullable = false, length = 10)
     private String panId;
