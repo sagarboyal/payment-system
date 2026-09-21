@@ -4,21 +4,21 @@ import com.ps.backend.common.enums.BusinessType;
 import com.ps.backend.common.enums.MerchantStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "merchants", indexes = {
         @Index(name = "idx_merchant_email", columnList = "email"),
         @Index(name = "idx_merchant_pan", columnList = "pan_id")
 })
+@Builder
 public class Merchant {
 
     @Id
