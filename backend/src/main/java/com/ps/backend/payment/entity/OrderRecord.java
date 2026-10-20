@@ -1,5 +1,6 @@
 package com.ps.backend.payment.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.entity.Money;
 import com.ps.backend.common.enums.OrderStatus;
 import jakarta.persistence.*;
@@ -7,9 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,14 +22,17 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(
-        name = "orders",
+        name = "order_record",
         indexes = {
-                @Index(name = "idx_orders_merchant_id", columnList = "merchant_id")
+                @Index(name = "idx_order_id_merchant_id", columnList = "id, merchant_id"),
+                @Index(name = "idx_order_merchant_id", columnList = "merchant_id")
         }
 )
-public class OrderRecord {
+@Builder
+public class OrderRecord extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -59,10 +61,11 @@ public class OrderRecord {
     @NotNull(message = "Order status is required")
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private OrderStatus status = OrderStatus.CREATED;
+    private OrderStatus orderStatus = OrderStatus.CREATED;
 
     @Min(value = 0, message = "Attempts count cannot be negative")
     @Column(name = "attempts", nullable = false)
+    @Builder.Default
     private int attempts = 0;
 
     @Size(max = 15, message = "Notes cannot exceed 15 key-value pairs")
@@ -73,11 +76,4 @@ public class OrderRecord {
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
 }

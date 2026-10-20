@@ -7,6 +7,7 @@ import com.ps.backend.merchant.dto.request.MerchantSignupRequest;
 import com.ps.backend.merchant.dto.response.MerchantResponse;
 import com.ps.backend.merchant.entity.AppUser;
 import com.ps.backend.merchant.entity.Merchant;
+import com.ps.backend.merchant.mapper.MerchantMapper;
 import com.ps.backend.merchant.repository.AppUserRepository;
 import com.ps.backend.merchant.repository.MerchantRepository;
 import com.ps.backend.merchant.service.AuthService;
@@ -22,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
 
     private  final AppUserRepository appUserRepository;
     private final MerchantRepository merchantRepository;
+    private final MerchantMapper merchantMapper;
 
     @Override
     @Transactional
@@ -30,15 +32,17 @@ public class AuthServiceImpl implements AuthService {
             throw new DuplicateResourceException("DUPLICATE_MERCHANT_EMAIL" ,
                     "Merchant with email already exists: "+request.email());
         }
-
-        Merchant merchant = Merchant.builder()
-                .businessName((request.businessName()))
-                .businessType(request.businessType())
-                .name(request.name())
-                .email(request.email())
-                .status(MerchantStatus.PENDING_KYC)
-                .build();
+        Merchant merchant = merchantMapper.toEntityFromSignupRequest(request);
+        merchant.setStatus(MerchantStatus.PENDING_KYC);
         merchant = merchantRepository.save(merchant);
+
+//        Merchant merchant = Merchant.builder()
+//                .businessName((request.businessName()))
+//                .businessType(request.businessType())
+//                .name(request.name())
+//                .email(request.email())
+//                .status(MerchantStatus.PENDING_KYC)
+//                .build();
 
         AppUser appUser = AppUser.builder()
                 .email(request.email())
@@ -48,13 +52,6 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         appUserRepository.save(appUser);
 
-        return new MerchantResponse(
-                merchant.getId(),
-                merchant.getName(),
-                merchant.getEmail(),
-                merchant.getBusinessName(),
-                merchant.getBusinessType(),
-                merchant.getStatus()
-        );
+        return merchantMapper.toResponse(merchant);
     }
 }

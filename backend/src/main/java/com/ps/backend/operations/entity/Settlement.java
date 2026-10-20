@@ -1,5 +1,6 @@
 package com.ps.backend.operations.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.entity.Money;
 import com.ps.backend.common.enums.SettlementStatus;
 import jakarta.persistence.*;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "settlement")
-public class Settlement {
+public class Settlement extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

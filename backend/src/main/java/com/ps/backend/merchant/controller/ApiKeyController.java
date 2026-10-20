@@ -3,9 +3,11 @@ package com.ps.backend.merchant.controller;
 import com.ps.backend.merchant.dto.request.CreateApiKeyRequest;
 import com.ps.backend.merchant.dto.response.ApiKeyCreateResponse;
 import com.ps.backend.merchant.dto.response.ApiKeyResponse;
+import com.ps.backend.merchant.entity.ApiKey;
 import com.ps.backend.merchant.service.ApiKeyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,11 @@ public class ApiKeyController {
     public ResponseEntity<Void> revoke(@PathVariable UUID merchantId,  @PathVariable UUID keyId){
         apiKeyService.revoke(merchantId, keyId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{keyId}/rotate")
+    public ResponseEntity<ApiKeyCreateResponse> rotateKey(@PathVariable UUID merchantId, @PathVariable UUID keyId){
+        return ResponseEntity.ok(apiKeyService.rotateKey(merchantId, keyId));
     }
 
 

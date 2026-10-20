@@ -1,5 +1,6 @@
 package com.ps.backend.operations.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import jakarta.persistence.*;
 
 @Entity

@@ -1,5 +1,6 @@
 package com.ps.backend.merchant.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.enums.Environment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -19,12 +20,12 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(
-        name = "api_keys",
+        name = "api_key",
         indexes = {
-                @Index(name = "idx_api_keys_merchant_id", columnList = "merchant_id")
+                @Index(name = "idx_api_key_merchant_env", columnList = "merchant_id, environment, enabled")
         }
 )
-public class ApiKey {
+public class ApiKey extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -75,11 +76,11 @@ public class ApiKey {
     @Column(name = "grace_period_expiry_at")
     private LocalDateTime gracePeriodExpiryAt;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+//    @CreationTimestamp
+//    @Column(name = "created_at", nullable = false, updatable = false)
+//    private LocalDateTime createdAt;
+//
+//    @UpdateTimestamp
+//    @Column(name = "updated_at", nullable = false)
+//    private LocalDateTime updatedAt;
 }

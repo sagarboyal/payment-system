@@ -1,5 +1,6 @@
 package com.ps.backend.merchant.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.enums.BusinessType;
 import com.ps.backend.common.enums.MerchantStatus;
 import jakarta.persistence.*;
@@ -14,12 +15,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "merchants", indexes = {
-        @Index(name = "idx_merchant_email", columnList = "email"),
-        @Index(name = "idx_merchant_pan", columnList = "pan_id")
+@Table(name = "merchant", indexes = {
+        @Index(name = "idx_merchant_status", columnList = "status")
 })
 @Builder
-public class Merchant {
+public class Merchant extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

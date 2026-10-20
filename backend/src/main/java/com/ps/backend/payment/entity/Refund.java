@@ -1,8 +1,10 @@
 package com.ps.backend.payment.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.entity.Money;
 import com.ps.backend.common.enums.RefundStatus;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -12,7 +14,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "refund")
-public class Refund {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Refund extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
