@@ -1,6 +1,7 @@
 package com.ps.backend.common.enums;
 
 public enum PaymentStatus {
+    CREATED,
     PENDING,
     AUTHORIZING,
     AUTHORIZED,

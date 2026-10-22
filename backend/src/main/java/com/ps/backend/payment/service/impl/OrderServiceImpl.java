@@ -84,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
        order = orderRepository.save(order);
        return orderMapper.toResponse(order);
     }
+
     @Override
     public List<PaymentResponse> listPayments(UUID merchantId, UUID orderId) {
         OrderRecord order =  orderRepository.findByIdAndMerchantId(orderId, merchantId)

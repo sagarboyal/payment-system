@@ -1,8 +1,7 @@
 package com.ps.backend.common.enums;
 
 public enum PaymentMethod {
-    CREDIT_CARD,
-    DEBIT_CARD,
+    CARD,
     NET_BANKING,
     UPI,
     WALLET,

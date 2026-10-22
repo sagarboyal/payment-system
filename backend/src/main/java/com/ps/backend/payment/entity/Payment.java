@@ -82,13 +82,16 @@ public class Payment extends BaseEntity {
     @Column(name = "bank_reference", length = 100)
     private String bankReference;
 
+    @Column(name = "processor_reference", length = 100)
+    private String processorReference;
+
     @Size(max = 50, message = "Error code cannot exceed 50 characters")
     @Column(name = "error_code", length = 50)
     private String errorCode;
 
     @Size(max = 500, message = "Error message cannot exceed 500 characters")
     @Column(name = "error_message", length = 500)
-    private String errorMessage;
+    private String errorDescription;
 
     @Column(name = "authorized_at")
     private LocalDateTime authorizedAt;
