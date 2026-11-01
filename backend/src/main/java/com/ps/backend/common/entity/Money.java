@@ -2,9 +2,7 @@ package com.ps.backend.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,6 +13,8 @@ import java.util.Objects;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // Required by Hibernate reflection
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Money implements Comparable<Money>, Serializable {
 
     // Smallest currency unit (paisa for INR, cents for USD)
@@ -25,16 +25,6 @@ public class Money implements Comparable<Money>, Serializable {
     @Column(name = "currency", nullable = false, length = 3)
     private String currency;
 
-    private Money(Long amountUnits, String currency) {
-        if (amountUnits == null) {
-            throw new IllegalArgumentException("Amount cannot be null");
-        }
-        if (currency == null || currency.trim().length() != 3) {
-            throw new IllegalArgumentException("Valid 3-letter ISO-4217 currency code is required");
-        }
-        this.amountUnits = amountUnits;
-        this.currency = currency.trim().toUpperCase();
-    }
 
     // --- Static Factory Methods ---
 

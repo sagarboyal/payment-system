@@ -1,5 +1,6 @@
 package com.ps.backend.payment.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.entity.Money;
 import com.ps.backend.common.enums.PaymentMethod;
 import com.ps.backend.common.enums.PaymentStatus;
@@ -7,9 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,22 +21,18 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(
-        name = "payments",
-        uniqueConstraints = {
-                // Prevents duplicate charges if the client retries an API call with the same idempotency key
-                @UniqueConstraint(
-                        name = "uk_payments_merchant_idempotency",
-                        columnNames = {"merchant_id", "idempotency_key"}
-                )
-        },
+        name = "payment",
         indexes = {
                 // Required: PostgreSQL does not auto-index FKs; speeds up fetching all payment attempts for an order
-                @Index(name = "idx_payments_order_id", columnList = "order_id")
+                @Index(name = "idx_payments_order_id", columnList = "order_id"),
+                @Index(name = "idx_payment_merchant_id", columnList = "merchant_id")
         }
 )
-public class Payment {
+@Builder
+public class Payment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -87,13 +82,16 @@ public class Payment {
     @Column(name = "bank_reference", length = 100)
     private String bankReference;
 
+    @Column(name = "processor_reference", length = 100)
+    private String processorReference;
+
     @Size(max = 50, message = "Error code cannot exceed 50 characters")
     @Column(name = "error_code", length = 50)
     private String errorCode;
 
     @Size(max = 500, message = "Error message cannot exceed 500 characters")
     @Column(name = "error_message", length = 500)
-    private String errorMessage;
+    private String errorDescription;
 
     @Column(name = "authorized_at")
     private LocalDateTime authorizedAt;
@@ -109,12 +107,4 @@ public class Payment {
 
     @Column(name = "failed_at")
     private LocalDateTime failedAt;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
 }

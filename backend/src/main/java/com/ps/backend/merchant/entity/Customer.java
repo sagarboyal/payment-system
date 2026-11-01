@@ -1,13 +1,12 @@
 package com.ps.backend.merchant.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,9 +16,11 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(
-        name = "customers",
+        name = "customer",
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uk_customer_merchant_email",
@@ -27,10 +28,11 @@ import java.util.UUID;
                 )
         },
         indexes = {
-                @Index(name = "idx_customer_merchant_contact", columnList = "merchant_id, contact_number")
+                @Index(name = "idx_customer_merchant_id", columnList = "merchant_id"),
+                @Index(name = "idx_customer_email", columnList = "email")
         }
 )
-public class Customer {
+public class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -60,12 +62,4 @@ public class Customer {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
 }

@@ -1,31 +1,32 @@
 package com.ps.backend.merchant.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 @Table(
-        name = "app_users",
+        name = "app_user",
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_app_user_email", columnNames = {"email"})
         },
         indexes = {
-                @Index(name = "idx_app_user_merchant", columnList = "merchant_id")
+                @Index(name = "idx_app_user_merchant_id", columnList = "merchant_id")
         }
 )
-public class AppUser {
+public class AppUser extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -1,13 +1,12 @@
 package com.ps.backend.merchant.entity;
 
+import com.ps.backend.common.entity.BaseEntity;
 import com.ps.backend.common.enums.Environment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,14 +16,16 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(
-        name = "api_keys",
+        name = "api_key",
         indexes = {
-                @Index(name = "idx_api_keys_merchant_id", columnList = "merchant_id")
+                @Index(name = "idx_api_key_merchant_env", columnList = "merchant_id, environment, enabled")
         }
 )
-public class ApiKey {
+public class ApiKey extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -47,8 +48,14 @@ public class ApiKey {
     // Store a one-way cryptographic hash (e.g., Argon2id or SHA-256 with salt).
     @NotBlank(message = "Secret key hash is required")
     @Size(max = 255, message = "Secret key hash cannot exceed 255 characters")
-    @Column(name = "secret_key_hash", nullable = false, length = 255)
-    private String secretKey;
+    @Column(name = "key_secret_hash", nullable = false, length = 255)
+    private String keySecretHash;
+
+    @Column(name = "previous_key_secret_hash")
+    private String previousKeySecretHash;
+
+    @Column(name = "webhook_secret_hash")
+    private String webhookSecretHash;
 
     @NotNull(message = "Environment is required")
     @Enumerated(EnumType.STRING)
@@ -56,6 +63,7 @@ public class ApiKey {
     private Environment environment;
 
     @Column(name = "is_enabled", nullable = false)
+    @Builder.Default
     private boolean enabled = true;
 
     @Column(name = "last_used_at")
@@ -68,11 +76,11 @@ public class ApiKey {
     @Column(name = "grace_period_expiry_at")
     private LocalDateTime gracePeriodExpiryAt;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+//    @CreationTimestamp
+//    @Column(name = "created_at", nullable = false, updatable = false)
+//    private LocalDateTime createdAt;
+//
+//    @UpdateTimestamp
+//    @Column(name = "updated_at", nullable = false)
+//    private LocalDateTime updatedAt;
 }
